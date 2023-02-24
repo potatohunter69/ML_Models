@@ -23,6 +23,9 @@ using NinjaTrader.NinjaScript.DrawingTools;
 #endregion
 
 //This namespace holds Strategies in this folder and is required. Do not change it. 
+
+
+// nasdaq 15 minuts chart 
 namespace NinjaTrader.NinjaScript.Strategies.mystrategies
 {
 	public class sma10and20 : Strategy

@@ -66,7 +66,7 @@ namespace NinjaTrader.NinjaScript.Strategies.mystrategies
 				
 				
 				takeProfit = 1000;                     //   (1000,500,40,63,45) good winrate
-									// (900,1000,32,67,44)
+									// (900,1000,32,67,44),(900,1000,42,67,44)
 				stopLoss = 500;
 				minPriceDistance = 40;
 				highRSI= 63;

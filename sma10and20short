@@ -76,7 +76,7 @@ namespace NinjaTrader.NinjaScript.Strategies.mystrategies
 				
 				AddChartIndicator(SMA(Close, maFast));
     			AddChartIndicator(SMA(Close, maSlow));
-				AddChartIndicator(SMA(Close, maFilter));
+			//	AddChartIndicator(SMA(Close, maFilter));
 			 	AddChartIndicator(RSI(rsiPeriod,1));
 				
 				
@@ -121,7 +121,7 @@ namespace NinjaTrader.NinjaScript.Strategies.mystrategies
 		{
 		    double priceDistance = Math.Abs(Close[0] - SMA(Close, maFast)[0]); 
 		    return Close[0] < SMA(Close, maFast)[0] && SMA(Close, maFast)[0] < SMA(Close, maSlow)[0]   &&  RSI(rsiPeriod,1)[0] > lowRSI &&
-				SMA(Close, maSlow)[0] < SMA(Close, maFilter)[0] && Close[0] < Open[1] && IsTradeTime() && priceDistance > minPriceDistance; // && CheckVolume();
+				  Close[0] < Open[1] && priceDistance > minPriceDistance; // && CheckVolume();
 		}
 		
 		

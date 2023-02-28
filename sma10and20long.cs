@@ -28,7 +28,7 @@ using NinjaTrader.NinjaScript.DrawingTools;
 // nasdaq 15 minuts chart 
 namespace NinjaTrader.NinjaScript.Strategies.mystrategies
 {
-	public class sma10and20 : Strategy
+	public class sma10and20long : Strategy
 	{
 		
 		// Set the parameters for the moving averages
@@ -43,8 +43,8 @@ namespace NinjaTrader.NinjaScript.Strategies.mystrategies
 		{
 			if (State == State.SetDefaults)
 			{
-				Description									= @"10and20SMA";
-				Name										= "sma10and20";
+				Description									= @"10and20SMA(long)";
+				Name										= "sma10and20long";
 				Calculate									= Calculate.OnBarClose;
 				EntriesPerDirection							= 1;
 				EntryHandling								= EntryHandling.AllEntries;
@@ -59,18 +59,17 @@ namespace NinjaTrader.NinjaScript.Strategies.mystrategies
 				TraceOrders									= false;
 				RealtimeErrorHandling						= RealtimeErrorHandling.StopCancelClose;
 				StopTargetHandling							= StopTargetHandling.PerEntryExecution;
-				BarsRequiredToTrade							= 20;
+				BarsRequiredToTrade							= 1;
 				// Disable this property for performance gains in Strategy Analyzer optimizations
 				// See the Help Guide for additional information
 				IsInstantiatedOnEachOptimizationIteration	= true;
 				
 				
 				takeProfit = 1000;                     //   (1000,500,40,63,45) good winrate
-									// (900,1000,32,67,44),(900,1000,42,67,44)
-				stopLoss = 500;
-				minPriceDistance = 40;
-				highRSI= 63;
-				lowRSI= 45; 
+				stopLoss = 900;
+				minPriceDistance = 42;
+				highRSI= 67;
+				
 			}
 			else if (State == State.Configure)
 			{
@@ -92,37 +91,22 @@ namespace NinjaTrader.NinjaScript.Strategies.mystrategies
 			
 			if (IsLongEntry())
 		    {
-		        EnterLong();
+				SendMail("saminoorzy1@gmail.com", "Long Position Opened", "A position has been opened.");
+		        EnterLong(1);
 				SetStopLoss(CalculationMode.Currency, stopLoss);
     			SetProfitTarget(CalculationMode.Currency, takeProfit);
 		    }
-		    else if (IsShortEntry())
-		    {
-		        EnterShort();
-				SetStopLoss(CalculationMode.Currency, 500);
-    			SetProfitTarget(CalculationMode.Currency, 1000);
-		    }
-			
+		  
 			
 			if (Position.MarketPosition == MarketPosition.Long && Close[0] < SMA(Close, maFast)[0])
 		    {
 		        ExitLong();
 		    }
-		    else if (Position.MarketPosition == MarketPosition.Short && Close[0] > SMA(Close, maFast)[0])
-		    {
-		        ExitShort();
-		    }
+		 
 				
 		}
 			
-		/*
-		{
-    double priceDistance = Math.Abs(Close[0] - SMA(Close, maFast)[0]);
-    return Close[0] > SMA(Close, maFast)[0] && SMA(Close, maFast)[0] > SMA(Close, maSlow)[0] && SMA(Close, maSlow)[0] > SMA(Close, maFilter)[0] && priceDistance > minPriceDistance && Close[0] < SMA(Close, maSlow)[0] && Close[0] > Open[1] && RSI(rsiPeriod)[0] > 50 && IsTradeTime();
-}
-		
-		*/
-		
+
 		
 		
 		// Define the long and short entry conditions with the filter
@@ -133,12 +117,6 @@ namespace NinjaTrader.NinjaScript.Strategies.mystrategies
 				SMA(Close, maSlow)[0] > SMA(Close, maFilter)[0] && priceDistance > minPriceDistance && Close[0] > Open[1] && IsTradeTime() && RSI(rsiPeriod,1)[0] < highRSI;// && CheckVolume();
 		}
 
-		private bool IsShortEntry()
-		{
-		    double priceDistance = Math.Abs(Close[0] - SMA(Close, maFast)[0]);
-		    return Close[0] < SMA(Close, maFast)[0] && SMA(Close, maFast)[0] < SMA(Close, maSlow)[0] && 
-				SMA(Close, maSlow)[0] < SMA(Close, maFilter)[0] && priceDistance > minPriceDistance && Close[0] < Open[1] && IsTradeTime() && RSI(rsiPeriod,1)[0] > lowRSI;// && CheckVolume();
-		}
 		
 		
 		
@@ -186,13 +164,7 @@ namespace NinjaTrader.NinjaScript.Strategies.mystrategies
 		public double minPriceDistance
 		{get; set;}
 		
-		
-		
-		[NinjaScriptProperty]
-		[Display(ResourceType = typeof(Custom.Resource), Name = "Low RSI", Description= "Low RSI")]
-		public double lowRSI
-		{get; set;}
-		
+	
 		
 		[NinjaScriptProperty]
 		[Display(ResourceType = typeof(Custom.Resource), Name = "highRSI", Description= "highRSI")]

@@ -36,7 +36,8 @@ namespace NinjaTrader.NinjaScript.Strategies.mystrategies
 		int maSlow = 20;
 		int maFilter = 50;
 		int rsiPeriod = 20;
-	
+		
+		public double MyVolume;
 				
 		
 		protected override void OnStateChange()
@@ -69,6 +70,8 @@ namespace NinjaTrader.NinjaScript.Strategies.mystrategies
 				stopLoss = 900;
 				minPriceDistance = 63;
 				lowRSI= 27; 
+				MyVolume = 45000;
+			
 			}
 			else if (State == State.Configure)
 			{
@@ -78,6 +81,7 @@ namespace NinjaTrader.NinjaScript.Strategies.mystrategies
     			AddChartIndicator(SMA(Close, maSlow));
 			//	AddChartIndicator(SMA(Close, maFilter));
 			 	AddChartIndicator(RSI(rsiPeriod,1));
+				AddChartIndicator(VOL());
 				
 				
 			}
@@ -103,47 +107,86 @@ namespace NinjaTrader.NinjaScript.Strategies.mystrategies
 		    {
 		        ExitShort();
 		    }
+			
+			
 				
 		}
-			
-		/*
-		{
-    double priceDistance = Math.Abs(Close[0] - SMA(Close, maFast)[0]);
-    return Close[0] > SMA(Close, maFast)[0] && SMA(Close, maFast)[0] > SMA(Close, maSlow)[0] && SMA(Close, maSlow)[0] > SMA(Close, maFilter)[0] && priceDistance > minPriceDistance && Close[0] < SMA(Close, maSlow)[0] && Close[0] > Open[1] && RSI(rsiPeriod)[0] > 50 && IsTradeTime();
-}
 		
-		*/
+		
+		protected override void OnOrderUpdate(Order order, double limitPrice, double stopPrice, int quantity, int filled, double averageFillPrice, OrderState orderState, DateTime time, ErrorCode error, string nativeError)
+		{
+			
+			    if (order.OrderState == OrderState.Filled && order.Name == "Profit Target" )
+			    {
+			       SendMail("saminoorzy1@gmail.com", "Profit Target", "Profit Target");
+			    }
+				
+				 if (order.OrderState == OrderState.Filled &&  order.Name == "Stop Loss")
+			    {
+			       SendMail("saminoorzy1@gmail.com", "Stop Loss", "Stop Loss");
+			    }
+
+		 
+		}		
+		 
 		
 		
 		
 
 		private bool IsShortEntry()
 		{
-		    double priceDistance = Math.Abs(Close[0] - SMA(Close, maFast)[0]); 
+			
+			
+			double priceDistance = Math.Abs(Close[0] - SMA(Close, maFast)[0]); 
 		    return Close[0] < SMA(Close, maFast)[0] && SMA(Close, maFast)[0] < SMA(Close, maSlow)[0]   &&  RSI(rsiPeriod,1)[0] > lowRSI &&
-				  Close[0] < Open[1] && priceDistance > minPriceDistance; // && CheckVolume();
+				 priceDistance > minPriceDistance && CheckVolume() && CandleChck();// && IsTradeTime();
+			
+			
 		}
 		
 		
 		
 		private bool IsTradeTime()
 		{
+			
 		    int hour = Time[0].Hour;
-		    return (hour >= 1 && hour <= 24) || (hour >= 1 && hour <= 24);
+		    if(hour >= 17 && hour <= 18){
+				return false;
+			}
+			
+			
+			return true; 
 		}
+		
+		
 		
 		
 		
 		private bool CheckVolume()
 		{
-			 double volume = VolumeUpDown()[0];
 			
-			if(volume < 40000){
+			
+			if(VOL()[0] < MyVolume && VOL()[1] < MyVolume){
 				
 				return true; 
 			}
 		    
 			return false;
+		}
+		
+		
+		
+		
+		
+		private bool CandleChck()
+		{
+		  
+		    
+			if (Close[0] < Close[1]){
+				
+				return true; 
+			}
+			return false; 
 		}
 		
 		
@@ -178,6 +221,9 @@ namespace NinjaTrader.NinjaScript.Strategies.mystrategies
 		{get; set;}
 		
 		
+		
+		
+
 		
 	}
 }

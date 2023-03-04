@@ -47,7 +47,7 @@ namespace NinjaTrader.NinjaScript.Strategies.mystrategies
 				Description									= @"10and20SMA(Short)";
 				Name										= "sma10and20(short)";
 				Calculate									= Calculate.OnBarClose;
-				EntriesPerDirection							= 1;
+				EntriesPerDirection							= 10;
 				EntryHandling								= EntryHandling.AllEntries;
 				IsExitOnSessionCloseStrategy				= true;
 				ExitOnSessionCloseSeconds					= 30;

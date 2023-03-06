@@ -83,6 +83,10 @@ namespace NinjaTrader.NinjaScript.Strategies.mystrategies
 				
 				EnterShort(Size);
 			}
+			else if(IsLongEntery() && IsTradeTime()){
+				
+				EnterLong(Size);
+			}
 
 			
 				SetStopLoss(CalculationMode.Currency, stopLoss);
@@ -103,6 +107,14 @@ namespace NinjaTrader.NinjaScript.Strategies.mystrategies
 		}
 		
 		
+		private bool IsLongEntery()
+		{
+
+			
+		    return Close[0] > SMA(Close, sma14)[0]  && Close[0] > Close[1];
+				
+		}
+		
 		
 		
 		
@@ -111,7 +123,7 @@ namespace NinjaTrader.NinjaScript.Strategies.mystrategies
 		{
 			//  || hour > 20 && hour < 23
 		    int hour = Time[0].Hour;
-		    if(hour > 15 && hour < 22 ){
+		    if(hour > 1 && hour < 24 ){
 				return true;
 			}
 			

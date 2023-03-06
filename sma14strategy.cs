@@ -20,163 +20,126 @@ using NinjaTrader.NinjaScript;
 using NinjaTrader.Core.FloatingPoint;
 using NinjaTrader.NinjaScript.Indicators;
 using NinjaTrader.NinjaScript.DrawingTools;
-using System.Threading; 
 #endregion
 
 //This namespace holds Strategies in this folder and is required. Do not change it. 
-namespace NinjaTrader.NinjaScript.Strategies
+namespace NinjaTrader.NinjaScript.Strategies.mystrategies
 {
-	
-	
-	public class SMA14Strategy : Strategy
-		{
-		    
-			private SMA sma;
-    		private RSI rsi;
-			private bool isMarketFlat; 
-			
-			
-			
-
-
-		    protected override void OnStateChange()
-		    {
-		        if (State == State.SetDefaults)
-		        {
-		            // Set the default strategy parameters
-		            Description = "Strategy based on a 20-period SMA";
-		            Name = "Moving Avrega Strategy";
-		            Calculate = Calculate.OnBarClose;
-		            EntriesPerDirection = 1;
-		            EntryHandling = EntryHandling.AllEntries;
-		            IsExitOnSessionCloseStrategy = true;
-		            ExitOnSessionCloseSeconds = 30;
-		            IsFillLimitOnTouch = false;
-		            MaximumBarsLookBack = MaximumBarsLookBack.TwoHundredFiftySix;
-		            OrderFillResolution = OrderFillResolution.Standard;
-		            Slippage = 0;
-		            StartBehavior = StartBehavior.WaitUntilFlat;
-		            TimeInForce = TimeInForce.Gtc;
-		            TraceOrders = false;
-		            RealtimeErrorHandling = RealtimeErrorHandling.StopCancelClose;
-		            StopTargetHandling = StopTargetHandling.PerEntryExecution;
-		            BarsRequiredToTrade = 1;
-					
-					
-					smaPeriod = 50; 
-					rsiPeriod = 14;
-					StopLoss = 500; 
-					ProfitTarget = 1000; 
-					
-					flatThreshold = 5; 
-					isMarketFlat = false; 
+	public class sma14strategy : Strategy
+	{
 		
-					
-	
-
-		            // Add a plot to display the SMA on the chart
-		            AddPlot(new Stroke(Brushes.Blue, 2), PlotStyle.Line, "SMA");
-		        }
-		        else if (State == State.DataLoaded)
-		        {
-		            sma = SMA(smaPeriod);
-            		rsi = RSI(rsiPeriod,1);
-					
-		           	 AddChartIndicator(sma);
-					 AddChartIndicator(rsi);
-					
-					
-					
-		        }
-		    }
-
-		    protected override void OnBarUpdate()
-		    {
+		
+		int sma14= 14; 
+		
+		
+		protected override void OnStateChange()
+		{
+			if (State == State.SetDefaults)
+			{
+				Description									= @"Enter the description for your new custom Strategy here.";
+				Name										= "sma14strategy";
+				Calculate									= Calculate.OnBarClose;
+				EntriesPerDirection							= 1;
+				EntryHandling								= EntryHandling.AllEntries;
+				IsExitOnSessionCloseStrategy				= true;
+				ExitOnSessionCloseSeconds					= 30;
+				IsFillLimitOnTouch							= false;
+				MaximumBarsLookBack							= MaximumBarsLookBack.TwoHundredFiftySix;
+				OrderFillResolution							= OrderFillResolution.Standard;
+				Slippage									= 0;
+				StartBehavior								= StartBehavior.WaitUntilFlat;
+				TimeInForce									= TimeInForce.Gtc;
+				TraceOrders									= false;
+				RealtimeErrorHandling						= RealtimeErrorHandling.StopCancelClose;
+				StopTargetHandling							= StopTargetHandling.PerEntryExecution;
+				BarsRequiredToTrade							= 20;
+				// Disable this property for performance gains in Strategy Analyzer optimizations
+				// See the Help Guide for additional information
+				IsInstantiatedOnEachOptimizationIteration	= true;
 				
-				// Do nothing until we have enough bars for indicators
-       			// if (CurrentBar < Math.Max(sma.Period, rsi.Period)) return;
-				 
-				 
-				 // Determine if we are in an uptrend or downtrend
-        		bool isUptrend = Close[0] > sma[0];
-				 
-				 
-				double sma14Diff = Math.Abs(sma[0] - sma[1]);
+				Size = 15;
+				stopLoss = 300;
+				profitTarget = 1000; 
 				
-				if (sma14Diff < flatThreshold)
-			    {
-			        isMarketFlat = true;
-			    }
-			    else
-				{
-			        isMarketFlat = false;
-				}
-				 
 				
-				if (!isMarketFlat)
-				{
-					
-					if (isUptrend && rsi[0] < 70)
-			        {
-						
-			            
-			            EnterLong(1);
-
-			            SetStopLoss(CalculationMode.Currency, StopLoss);
-						SetProfitTarget(CalculationMode.Currency,ProfitTarget);
-						
-
-			        }
-							 
-					 
-					  // Check for short entry signal
-			        if (!isUptrend && rsi[0] > 30)
-			        {
-						
-						 EnterShort(1);
-
-			            SetStopLoss(CalculationMode.Currency, StopLoss);
-						SetProfitTarget(CalculationMode.Currency,ProfitTarget);
-						
-						
-			       
-			        }
-				}
-						
-
-
-		    }
 			
-			
-			
-			
-			
-			#region Properties
-			// Define the profit target and stop loss properties in currency
-			    [Range(0, int.MaxValue), NinjaScriptProperty]
-			    [Display(Name = "smaPriod", Order = 1, GroupName = "Order Settings")]
-			    public int smaPeriod { get; set; } 
-
-			    [Range(0, int.MaxValue), NinjaScriptProperty]
-			    [Display(Name = "rsiPeriod", Order = 2, GroupName = "Order Settings")]
-			    public int rsiPeriod { get; set; } 
+			}
+			else if (State == State.Configure)
+			{
 				
 				
-				[Range(0, double.MaxValue), NinjaScriptProperty]
-			    [Display(Name = "Stop Loss", Order = 6, GroupName = "Order Settings")]
-			    public double StopLoss { get; set; } 
-				
-				[Range(0, double.MaxValue), NinjaScriptProperty]
-			    [Display(Name = "Profit Target", Order = 6, GroupName = "Order Settings")]
-			    public double ProfitTarget { get; set; } 
+				AddChartIndicator(SMA(Close, sma14));
+				AddChartIndicator(VOL());
 				
 				
-				[Range(0, int.MaxValue), NinjaScriptProperty]
-			    [Display(Name = "flatThreshold", Order = 4, GroupName = "Order Settings")]
-			    public double flatThreshold { get; set; } 
-
-				
-			#endregion
+			}
 		}
 
+		protected override void OnBarUpdate()
+		{
+			
+			
+			if(IsShortEntry() && IsTradeTime()){
+				
+				EnterShort(Size);
+			}
+
+			
+				SetStopLoss(CalculationMode.Currency, stopLoss);
+    			SetProfitTarget(CalculationMode.Currency, profitTarget);
+			
+		}
+		
+		
+		
+		
+		
+		private bool IsShortEntry()
+		{
+
+			
+		    return Close[0] < SMA(Close, sma14)[0]  && Close[0] < Close[1];
+				
+		}
+		
+		
+		
+		
+		
+				
+		private bool IsTradeTime()
+		{
+			//  || hour > 20 && hour < 23
+		    int hour = Time[0].Hour;
+		    if(hour > 15 && hour < 22 ){
+				return true;
+			}
+			
+			
+			return false; 
+		}
+		
+		
+		
+		
+		
+		[NinjaScriptProperty]
+		[Display(ResourceType = typeof(Custom.Resource), Name = "Stop Loss", Description= "Stop Loss")]
+		public double stopLoss
+		{get; set;}
+		
+		
+		[NinjaScriptProperty]
+		[Display(ResourceType = typeof(Custom.Resource), Name = "Take Profit", Description= "Take Profit")]
+		public double profitTarget
+		{get; set;}
+		
+		
+		[NinjaScriptProperty]
+		[Display(ResourceType = typeof(Custom.Resource), Name = "Size", Description= "Size")]
+		public int Size
+		{get; set;}
+
+
+	}
 }

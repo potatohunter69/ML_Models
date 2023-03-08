@@ -123,7 +123,7 @@ namespace NinjaTrader.NinjaScript.Strategies.mystrategies
 		{
 			//  || hour > 20 && hour < 23
 		    int hour = Time[0].Hour;
-		    if(hour > 1 && hour < 24 ){
+		    if(hour >= 15 && hour < 20 || hour == 3  || hour == 9  || hour == 11 ){
 				return true;
 			}
 			

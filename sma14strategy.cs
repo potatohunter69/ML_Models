@@ -57,9 +57,10 @@ namespace NinjaTrader.NinjaScript.Strategies.mystrategies
 				// See the Help Guide for additional information
 				IsInstantiatedOnEachOptimizationIteration	= true;
 				
-				Size = 15;
-				stopLoss = 300;
+				Size = 10;
+				stopLoss = 400;
 				profitTarget = 1000; 
+				minPriceDistance = 35; 
 				
 				
 			
@@ -83,7 +84,7 @@ namespace NinjaTrader.NinjaScript.Strategies.mystrategies
 				
 				EnterShort(Size);
 			}
-			else if(IsLongEntery() && IsTradeTime()){
+			else if( IsLongEntery() && IsTradeTime()){
 				
 				EnterLong(Size);
 			}
@@ -101,8 +102,9 @@ namespace NinjaTrader.NinjaScript.Strategies.mystrategies
 		private bool IsShortEntry()
 		{
 
-			
-		    return Close[0] < SMA(Close, sma14)[0]  && Close[0] < Close[1];
+			double priceDistance = Math.Abs(Close[0] - SMA(Close, 14)[0]); 
+		    return Close[0] < SMA(Close, sma14)[0] && Close[0] < Close[1]&& priceDistance > minPriceDistance ;
+			return true; 
 				
 		}
 		
@@ -110,8 +112,9 @@ namespace NinjaTrader.NinjaScript.Strategies.mystrategies
 		private bool IsLongEntery()
 		{
 
-			
-		    return Close[0] > SMA(Close, sma14)[0]  && Close[0] > Close[1];
+			double priceDistance = Math.Abs(Close[0] - SMA(Close, 14)[0]); 
+		    return Close[0] > SMA(Close, sma14)[0] && Close[0] > Close[1] && priceDistance > minPriceDistance ;
+			return true; 
 				
 		}
 		
@@ -123,7 +126,8 @@ namespace NinjaTrader.NinjaScript.Strategies.mystrategies
 		{
 			//  || hour > 20 && hour < 23
 		    int hour = Time[0].Hour;
-		    if(hour >= 15 && hour < 20 || hour == 3  || hour == 9  || hour == 11 ){
+		    if(hour >= 15 && hour < 19   ){
+			//if(hour >= 1 && hour <= 24){ 
 				return true;
 			}
 			
@@ -151,7 +155,13 @@ namespace NinjaTrader.NinjaScript.Strategies.mystrategies
 		[Display(ResourceType = typeof(Custom.Resource), Name = "Size", Description= "Size")]
 		public int Size
 		{get; set;}
-
+		
+		[NinjaScriptProperty]
+		[Display(ResourceType = typeof(Custom.Resource), Name = "Price Distance", Description= "Price Distance")]
+		public double minPriceDistance
+		{get; set;}
+		
+		
 
 	}
 }

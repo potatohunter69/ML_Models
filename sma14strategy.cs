@@ -58,8 +58,8 @@ namespace NinjaTrader.NinjaScript.Strategies.mystrategies
 				IsInstantiatedOnEachOptimizationIteration	= true;
 				
 				Size = 10;
-				stopLoss = 400;
-				profitTarget = 1000; 
+				stopLoss = 300;
+				profitTarget = 1100; 
 				minPriceDistance = 35; 
 				
 				
@@ -84,7 +84,7 @@ namespace NinjaTrader.NinjaScript.Strategies.mystrategies
 				
 				EnterShort(Size);
 			}
-			else if( IsLongEntery() && IsTradeTime()){
+			else if( IsLongEntery()  && IsTradeTime()){
 				
 				EnterLong(Size);
 			}
@@ -124,13 +124,33 @@ namespace NinjaTrader.NinjaScript.Strategies.mystrategies
 				
 		private bool IsTradeTime()
 		{
+			
+			
+			
 			//  || hour > 20 && hour < 23
 		    int hour = Time[0].Hour;
-		    if(hour >= 15 && hour < 19   ){
+		    if(hour >= 1 && hour <= 24 ){
 			//if(hour >= 1 && hour <= 24){ 
 				return true;
 			}
 			
+			/*
+			
+			DateTime currentTime = Time[0];
+			
+		    DateTime entryTime1 = new DateTime(currentTime.Year, currentTime.Month, currentTime.Day, 15, 30, 0);
+		    DateTime entryTime2 = new DateTime(currentTime.Year, currentTime.Month, currentTime.Day, 16, 00, 0);
+		    DateTime entryTime3 = new DateTime(currentTime.Year, currentTime.Month, currentTime.Day, 16, 30, 0);
+		    DateTime entryTime4 = new DateTime(currentTime.Year, currentTime.Month, currentTime.Day, 17, 00, 0);
+
+		    if (currentTime == entryTime1 || currentTime == entryTime2 || currentTime == entryTime3 || currentTime == entryTime4)
+		    {
+		      //  EnterLong();
+				return true;
+		    }
+			
+			*/
+	
 			
 			return false; 
 		}

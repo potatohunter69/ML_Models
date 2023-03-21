@@ -1,21 +1,65 @@
-import matplotlib.pyplot as plt 
 
-fig, ax= plt.subplots()
+import math 
 
-x_data = [1,2,3,4,5]
-y_data = [0,4,6,2,1]
+"""
+# creates a empty list
+nums = []
 
+# appending data in list
+nums.append(21)
+nums.append(40.5)
+nums.append("String")
 
-ax.plot(x_data,y_data)
-
-ax.set_xlabel('X Label')
-ax.set_ylabel('Y Label')
-ax.set_title('Title')
-
-
-ax.plot(x_data, y_data, color= 'red',  linestyle='dashed', marker='o', markersize=10)
+print(nums)
 
 
-plt.show()
+
+// 
+name = input("print you name: ")
+
+
+
+
+"""
+
+
+def hello():
+    print("bye")
+
+
+
+def Main():
+
+    for step in range(10):
+        print("hi")
+
+    step = 0; 
+    while(step < 10):
+        print("no")
+        step= step +1 
+    
+    hello()
+    print(pow(2,4))
+    print(math.sqrt(4))
+    print(True + True)
+    print(None ) #None = null
+
+
+    if(2==2):
+        print("yes")
+    elif(3==3):
+        print("hfdsoi")
+    else:
+        print("hi")
+    
+
+
+
+
+
+
+if __name__ == "__main__": 
+    Main()
+
 
 

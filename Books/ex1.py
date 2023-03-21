@@ -84,6 +84,49 @@ we stopp them, it's better to handle those darawdonw instead
 
 
 
+
+--- order types: 
+
+- market order : executes a trade immeditely, aggrasive order order irrespective of availabel price 
+
+- limit orders: A limit order is an order to buy or sell a security at a specified price or better. This means that the 
+trade will only be executed if the market price reaches the specified limit price or better.
+
+- Stop Order: A stop order is an order to buy or sell a security at a specified price, but only after the market 
+has reached that price
+
+-- prices in ninjatrader 
+    Last Price: High-frequency traders may use the last traded price to capture momentum in the market and react 
+    quickly to changes in price.
+
+    Bid Price: Traders may use the bid price to execute trades quickly and at a lower cost, especially if they are looking to sell 
+    a security.
+
+    Ask Price: Traders may use the ask price to execute trades quickly and at a higher price, especially if they are looking to 
+    buy a security.
+
+    
+
+--- transaction costs :
+
+    - commision: is the price you have to pay to the broker every time you make a trade
+    
+    - Slippage: the difference in price achived between the time when the strategy decides to make a transiction and the 
+    time when the transaction is actually done!. this can impact the strategy alot 
+
+        - instruments with high volitility experince slippage a lot 
+
+
+        
+
+-- latency 
+- for high frequancy trading latency matters, decreasing latency involves minimising the distance between the system and exchange 
+    
+
+
+
+
+
 """
 
 

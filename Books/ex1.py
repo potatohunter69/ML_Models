@@ -1,5 +1,14 @@
 #ex1 
 
+
+import numpy as np
+import scipy as si
+import pandas as pd 
+from sklearn import datasets
+import IPython 
+import yfinance 
+import matplotlib as plot
+
 """
 
 -- advantages of algo trading : 
@@ -131,5 +140,33 @@ has reached that price
 
 
 
+mean = np.mean([1,2,3])
+
+from scipy import std
+
+std = std([1,2,3])
+
+data = pd.DataFrame()
 
 
+import yfinance as yf
+import matplotlib.pyplot as plt
+from datetime import datetime, timedelta
+
+# Define the Ticker symbol and date range
+symbol = "TSLA"
+start_date = datetime.today() - timedelta(days=7)
+end_date = datetime.today()
+
+# Retrieve the historical stock data
+stock_data = yf.download(symbol, start=start_date, end=end_date)
+
+# Extract the 'Close' prices
+close_prices = stock_data['Close']
+
+# Plot the line chart
+plt.plot(close_prices)
+plt.xlabel('Date')
+plt.ylabel('Price')
+plt.title(f'{symbol} stock price over the past 7 days')
+plt.show()

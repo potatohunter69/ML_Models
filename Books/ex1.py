@@ -134,11 +134,7 @@ has reached that price
 
 
 
-
-
-"""
-
-
+---
 
 mean = np.mean([1,2,3])
 
@@ -170,3 +166,156 @@ plt.xlabel('Date')
 plt.ylabel('Price')
 plt.title(f'{symbol} stock price over the past 7 days')
 plt.show()
+
+
+
+
+
+/// how to downlaod a dat from yfinace 
+
+import yfinance as yf 
+import datetime as dt 
+import matplotlib.pyplot as plt 
+
+start = dt.datetime.now() - dt.timedelta(days= 300)
+end = dt.datetime.now()
+
+sympol = '^IXIC'
+data = yf.download(sympol,start, end,interval="1d")
+
+
+plt.plot(data["Close"])
+plt.title("Nasdaq daily price")
+plt.xlabel("Date")
+plt.ylabel("Price")
+plt.show()
+
+
+
+
+/// how to do adf test for see if data series stationary 
+
+import yfinance as yf 
+import datetime as dt 
+import matplotlib.pyplot as plt 
+
+from statsmodels.tsa.stattools import adfuller
+
+start = "2021-06-01"
+end = "2023-03-20"
+
+sympol = '^IXIC'
+data = yf.download(sympol,start, end,interval="1h") # "Valid intervals: [1m, 2m, 5m, 15m, 30m, 60m, 90m, 1h, 1d, 5d, 1wk, 1mo, 3mo]"
+
+
+plt.plot(data["Close"])
+plt.title("Nasdaq daily price")
+plt.xlabel("Date")
+plt.ylabel("Price")
+#plt.show()
+
+result = adfuller(data["Close"])
+print(f'ADF Statistic: {result[0]}')
+print(f'n_lags: {result[1]}')
+print(f'p-value: {result[1]}')
+for key, value in result[4].items():
+    print('Critial Values:')
+    print(f'   {key}, {value}') 
+
+
+
+//// how to implement hurst exponent 
+
+import yfinance as yf 
+import datetime as dt 
+import matplotlib.pyplot as plt 
+from hurst import compute_Hc
+
+from statsmodels.tsa.stattools import adfuller
+
+start = "2022-10-01"
+end = "2023-03-20"
+
+sympol = '^IXIC'
+data = yf.download(sympol,start, end,interval="1h") # "Valid intervals: [1m, 2m, 5m, 15m, 30m, 60m, 90m, 1h, 1d, 5d, 1wk, 1mo, 3mo]"
+
+
+H, c, data = compute_Hc(data["Close"], kind='price', simplified=True)
+
+
+print("Hurst exponent for Nasdaq close price: {}".format(H))
+
+/// how to plot interest rate 
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import fredapi
+
+# API key for accessing FRED data
+api_key = 'da7376fba86d38398daad720914b95dd'
+
+# Connect to FRED database
+fred = fredapi.Fred(api_key=api_key)
+
+# Set start and end dates for data retrieval
+start_date = '2019-03-26'
+end_date = '2022-03-26'
+
+# Retrieve data on interest rates from FRED
+data = fred.get_series('DGS10', start_date=start_date, end_date=end_date)
+
+# Create a pandas DataFrame to store the data
+df = pd.DataFrame({'Interest Rates': data})
+
+# Plot the data
+plt.plot(df.index, df['Interest Rates'], label='Interest Rates')
+
+# Add title and labels for the x and y axes
+plt.title('Interest Rate Increase for the Past 2 Years')
+plt.xlabel('Date')
+plt.ylabel('Interest Rate (%)')
+
+# Show the plot
+plt.show()
+
+
+
+"""
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import fredapi
+
+# API key for accessing FRED data
+api_key = 'da7376fba86d38398daad720914b95dd'
+
+# Connect to FRED database
+fred = fredapi.Fred(api_key=api_key)
+
+# Set start and end dates for data retrieval
+start_date = '2019-03-26'
+end_date = '2021-03-26'
+
+# Retrieve data on NASDAQ Composite index and interest rates from FRED
+data_nasdaq = fred.get_series('NASDAQCOM', start_date=start_date, end_date=end_date)
+data_rates = fred.get_series('DGS10', start_date=start_date, end_date=end_date)
+
+# Create a pandas DataFrame to store the data
+df = pd.DataFrame({'Interest Rates': data_rates})
+
+# Plot the data
+
+plt.plot(df.index, df['Interest Rates'], label='Interest Rates')
+
+# Add title and labels for the x and y axes
+plt.title('NASDAQ Composite and Interest Rates for the Past 2 Years')
+plt.xlabel('Date')
+plt.ylabel('Value')
+
+# Add a legend to the plot
+plt.legend()
+
+# Show the plot
+plt.show()
+
+

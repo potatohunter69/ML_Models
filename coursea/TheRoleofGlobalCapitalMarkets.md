@@ -170,5 +170,108 @@ print("Y:{}".format(Y))
 print("Z:{}".format(Z))
 
 
+y_mean = Y.mean() # this wont work since Y is tensor 
+y_mean = Y.numpy().mean() # this works since the numpy converts the tensor to numpy array and then we can calculate the mann 
+
+
+
+
+## here you basically predict the value of inputs 
+y_mean = Y.numpy().mean()
+
+print(y_mean)
+
+def predict_mean(X):
+    y_hat = [y_mean] * len(X) #The function predict_mean simply returns a list y_hat containing the predicted values for each element in X, which are all equal to the value of y_mean. This is known as a "mean prediction
+    return y_hat # we simply say the mean value from training data is the same for all future values 
+
+Y_hat = predict_mean(X_test)
+
+print(Y_hat)
+
+
+
+# here we calculate the standard error: 
+
+errors = (Y_hat - Y)**2
+print(errors) 
+
+loss = tf.reduce_mean(errors) # = errors.numpy().mean()
+loss.numpy()
+
 ```
- 
+
+### This values for the MSE loss above will give us a baseline to compare how a more complex model is doing. we can see the standard error is 33 which is indicating the model is not doing good, first we predicted the value of each Y by using training data, then we compare the predicted value and compare with the actual value error 
+
+
+```python
+
+def loss_mse(X, Y, w0, w1):
+    Y_hat = w0 * X + w1 # here instead of predicting by just using the man, we predict the values with a better model and calculation method 
+    errors = (Y_hat - Y)**2
+    return tf.reduce_mean(errors)
+
+```
+
+<br>
+<br>
+
+## Gradiant function 
+describes the rate of change of a function with respect to its input variables. n other words, the gradient tells us which direction to move the input variables to increase or decrease the value of the function the most.
+
+```python 
+
+# here we define a function to predict 
+def loss_mse(X, Y, w0, w1):
+    Y_hat = w0 * X + w1
+    errors = (Y_hat - Y)**2
+    return tf.reduce_mean(errors)
+
+
+# our prediction function was dependent on two variables w0 and w1, in this function we compute the gradient which tell us in which direction our prediction result goint with respect to w0 and w1 
+def compute_gradients(X, Y, w0, w1):
+    with tf.GradientTape() as tape: 
+        loss = loss_mse(X,Y,w0, w1)
+        return tape.gradient(loss,[w0,w1]) # this is good one
+
+
+w0 = tf.Variable(0.0)
+w1 = tf.Variable(0.0)
+
+# tape.gradient(loss,[w0,w1]): this function returns the sensetivity for w0 and w1, 
+# if we have w0= 0, w1 = 0 we get dw0 = -204 and dw0= 38, this tell us the prediction function is more sensetiv to w0(204 > 38) and - means we should increase w0 to get more pricies prediction 
+dw0, dw1 = compute_gradients(X, Y, w0, w1)
+
+```
+
+## training 
+```python 
+# in this program we train the model 
+STEPS = 1000
+LEARNING_RATE = .02
+MSG = "STEP {step} - loss: {loss}, w0: {w0}, w1: {w1}\n"
+
+
+w0 = tf.Variable(0.0)
+w1 = tf.Variable(0.0)
+
+
+for step in range(0, STEPS + 1):
+
+    dw0, dw1 = compute_gradients(X, Y, w0, w1)
+    
+    w0.assign_sub(LEARNING_RATE*dw0)  # this is the actual training, in every step the gradient function tell the model in which direction move the variables, e.g. we start with 4.08 0.76, then 3.372 0.7552(the - and + in gradient tells wheter add or subtract, assign_sub, subtracts but somtimes we the direction is - which means it adds e.g from 3.372 0.7552 to 3.4719841 0.878032, both increases since the gradient tells the direction)
+    w1.assign_sub(LEARNING_RATE*dw1) 
+
+    if step % 100 == 0:
+        loss = loss_mse(X,Y,w0, w1)# TODO -- Your code here.
+        print(MSG.format(step=step, loss=loss, w0=w0.numpy(), w1=w1.numpy()))
+
+
+
+
+#  here we get a much smaller loss then before from 1554 to 2.4563633e-08
+loss = loss_mse(X_test, Y_test, w0, w1)
+loss.numpy()
+
+```

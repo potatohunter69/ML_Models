@@ -1,18 +1,34 @@
-# TradingBots
+# Machine Learning Model Development Project
+
+## Purpose
+
+The primary purpose of this project is to facilitate learning and build neural network models. This project serves as a valuable opportunity to explore and experiment with various machine learning tools and frameworks. It encourages hands-on experience with state-of-the-art technologies in the field of artificial intelligence and machine learning.
 
 
-1- Defining the trading strategy and program 
+## Key Tools and Frameworks
 
-2- Backtesting the strategy: Once the strategy is defined, the next step is to backtest it using historical data
+This project leverages a range of powerful machine learning tools and frameworks to develop, train, and evaluate neural network models. The following tools and libraries are used:
 
-3- Optimization: After backtesting the strategy, it is important to optimize it by testing different parameter values to determine the optimal combination. The optimization period should be between 6month to 2years 
-
-
-4- Walk-forward testing: Once the strategy is optimized, it is important to perform walk-forward testing to evaluate its performance on out-of-sample data. This involves dividing the historical data into two parts, a training set and a testing set. The training set is used to optimize the strategy, while the testing set is used to evaluate its performance. The walk-forward period should much longer than
-optimization period and you shouldn't include the omptimization period in walkforward. 
-
-- The strategy's performance should be consistent across the different walk-forward periods. If the strategy performs well during the         optimization period but poorly during the walk-forward periods, then it may be overfitting 
--all the futueres and parameters should be added during the optimization period. 
-- if the walk forward is negative then move on and fine a new strategy 
+* Vertex AI: Vertex AI provides a platform for creating, training, and deploying machine learning models. It simplifies the machine learning workflow, making it easier to develop and deploy models.
+* Keras API: Keras is a high-level neural networks API written in Python. It is particularly well-suited for rapid experimentation and prototyping. Keras allows us to build and train deep learning models efficiently.
+* TensorFlow: TensorFlow is an open-source machine learning framework developed by Google. It is known for its flexibility and scalability, making it suitable for a wide range of machine learning tasks.
+* PyTorch: PyTorch is another popular open-source machine learning framework that offers dynamic computational graphs and a strong focus on flexibility and deep learning research.
+* Google Cloud: Google Cloud provides various tools and services for machine learning and AI. It's used for cloud-based model deployment, data storage, and large-scale training.
 
 
+## Project Overview
+
+This project encompasses the following key components:
+
+* Data Preparation: Data plays a crucial role in machine learning. We collect, preprocess, and clean data to make it suitable for training machine learning models.
+* Model Development: Using the chosen tools and frameworks, we develop neural network models that are capable of learning and making predictions from the data.
+* Training and Experimentation: We train models on data, experiment with different architectures, and fine-tune hyperparameters to improve model performance.
+* Evaluation: We assess model performance using various metrics to determine how well the models generalize to unseen data.
+* Deployment: Models that show promise are deployed on cloud platforms using services like Google Cloud's Vertex AI.
+
+
+
+## to see some of the projects I have worked on, please clone: 
+
+````
+git clone https://github.com/potatohunter69/Machine-Learning-Model-Development-Project
